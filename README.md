@@ -1,5 +1,6 @@
 # 🦴 digFinder
 
+
 **Explore the past, one dig at a time.**
 
 digFinder is a mobile app designed for amateur paleontologists and fossil enthusiasts. It allows users to log, map, and share fossil findings around the world — building a collaborative, geolocated fossil database accessible to everyone.
