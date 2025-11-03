@@ -1,4 +1,5 @@
 # 🦴 digFinder
+<img width="1680" height="948" alt="image" src="https://github.com/user-attachments/assets/2b497bed-682e-4878-a17c-aded6d2647b8" />
 
 
 **Explore the past, one dig at a time.**
