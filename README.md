@@ -1,7 +1,6 @@
 # 🦴 digFinder
 <img width="1680" height="948" alt="image" src="https://github.com/user-attachments/assets/2b497bed-682e-4878-a17c-aded6d2647b8" />
 
-
 **Explore the past, one dig at a time.**
 
 digFinder is a mobile app designed for amateur paleontologists and fossil enthusiasts. It allows users to log, map, and share fossil findings around the world — building a collaborative, geolocated fossil database accessible to everyone.

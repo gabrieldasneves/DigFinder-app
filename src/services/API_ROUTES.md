@@ -17,9 +17,7 @@ http://localhost:3333
 
 - `GET /categories` - List all categories
 
-### Coupons (Needs update from market_id to register_id)
 
-- `PATCH /coupons/:market_id` - Update coupons
 
 ## Needed Routes
 
