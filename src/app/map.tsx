@@ -19,37 +19,40 @@ import BackButton from "@/components/atoms/backbutton";
 import { Categories } from "@/components/molecules/categories";
 import type { CategoriesProps } from "@/components/molecules/categories";
 
-type MarketProps = PlaceProps & {
+type RegisterProps = PlaceProps & {
   latitude: number;
   longitude: number;
 };
 
 export default function Map() {
   const [categories, setCategories] = useState<CategoriesProps>([]);
-  const [category, setCategory] = useState<string>("");
-  const [markets, setMarkets] = useState<MarketProps[]>([]);
+  const [category, setCategory] = useState<string>("all");
+  const [registers, setRegisters] = useState<RegisterProps[]>([]);
 
   async function fetchCategories() {
     try {
       const { data } = await api.get("/categories");
       setCategories(data);
-      setCategory(data[0].id);
     } catch (error) {
       console.log(error);
       Alert.alert("Categories not found");
     }
   }
 
-  async function fetchMarkets() {
+  async function fetchRegisters() {
     try {
-      if (!category) {
-        return;
+
+    let registers: RegisterProps[] = [];
+      if (category === "all") {
+        const response = await api.get("/registers");
+        registers = response.data;
       }
       const { data } = await api.get(`/registers/category/${category}`);
-      setMarkets(data);
+      registers = data;
+      setRegisters(registers);
     } catch (error) {
       console.log(error);
-      Alert.alert("Places not found");
+      Alert.alert("Registers not found");
     }
   }
 
@@ -68,11 +71,11 @@ export default function Map() {
 
   useEffect(() => {
     fetchCategories();
-  }, []);
-
-  useEffect(() => {
-    fetchMarkets();
   }, [category]);
+
+      useEffect(() => {
+        fetchRegisters();
+      }, [category]);
 
   return (
     <View
@@ -110,7 +113,7 @@ export default function Map() {
           }}
           image={require("@/assets/location.png")}
         />
-        {markets.map((item) => (
+        {registers.map((item) => (
           <Marker
             key={item.id}
             identifier={item.id}
@@ -144,7 +147,7 @@ export default function Map() {
             </Callout>
           </Marker>
         ))}
-        <Places data={markets} />
+        <Places data={registers} />
       </MapView>
     </View>
   );
