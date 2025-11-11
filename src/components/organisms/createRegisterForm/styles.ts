@@ -50,12 +50,13 @@ export const styles = StyleSheet.create({
   },
   subLabel: {
     fontFamily: fontFamily.regular,
-    color: colors.gray[300],
+    color: colors.gray[400],
+    fontSize: 12,
   },
   categoryExplainedButtonContainer: {
     flexDirection: "row",
     alignItems: "center",
-    justifyContent: "space-between",
+    justifyContent: "flex-start",
     marginBottom: 12,
   },
   categoryExplainedButton: {
@@ -63,7 +64,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 4,
     paddingVertical: 1,
     borderRadius: 25,
-    marginRight: 8,
+    marginLeft: 12,
   },
   categoryExplainedButtonText: {
     fontFamily: fontFamily.semiBold,

@@ -11,8 +11,8 @@ export const styles = StyleSheet.create({
     paddingBottom: 20,
   },
   categoryExplainedButtonContainer: {
-    gap: 8,
     marginLeft: 10,
+    marginBottom: 12,
     justifyContent: "center",
   },
   categoryExplainedButtonText: {
