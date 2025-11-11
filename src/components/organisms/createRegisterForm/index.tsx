@@ -24,7 +24,6 @@ import { colors } from "@/styles/colors";
 import { Loading } from "../../atoms/loading";
 import BackButton from "@/components/atoms/backbutton";
 
-// Schema de validação
 const registerSchema = z.object({
   title: z.string().min(3, "Title must have at least 3 characters"),
   categoryId: z.string().uuid("Please select a category"),
@@ -38,7 +37,6 @@ const registerSchema = z.object({
 
 type RegisterFormData = z.infer<typeof registerSchema>;
 
-// Tipo para as categorias
 type Category = {
   id: string;
   name: string;
@@ -53,8 +51,8 @@ export default function CreateRegisterForm() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [mapRegion, setMapRegion] = useState({
-    latitude: -23.5505,
-    longitude: -46.6333,
+    latitude: 35.6938,
+    longitude: 139.7034,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
   });
@@ -83,7 +81,6 @@ export default function CreateRegisterForm() {
     fetchCategories();
   }, []);
 
-  // Solicitar permissões
   const requestPermissions = async () => {
     const { status: cameraStatus } =
       await ImagePicker.requestCameraPermissionsAsync();
@@ -98,7 +95,6 @@ export default function CreateRegisterForm() {
     }
   };
 
-  // Obter localização atual
   const getCurrentLocation = async () => {
     try {
       const location = await Location.getCurrentPositionAsync({});
@@ -114,7 +110,6 @@ export default function CreateRegisterForm() {
     }
   };
 
-  // Selecionar foto
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -128,11 +123,10 @@ export default function CreateRegisterForm() {
     }
   };
 
-  // Enviar formulário
   const onSubmit = async (data: RegisterFormData) => {
     try {
-      // TODO: Implementar upload de fotos e envio do formulário
       console.log(data);
+    //   await api.post("/createDiscovery",data)
     } catch (error) {
       Alert.alert("Erro", "Erro ao enviar formulário");
     }
@@ -255,7 +249,6 @@ export default function CreateRegisterForm() {
           )}
         />
 
-        {/* Photos */}
         <View style={styles.photoContainer}>
           <Text style={styles.label}>Add photos</Text>
           <TouchableOpacity style={styles.photoButton} onPress={pickImage}>
@@ -263,7 +256,6 @@ export default function CreateRegisterForm() {
           </TouchableOpacity>
         </View>
 
-        {/* Photo Preview */}
         <ScrollView horizontal style={styles.photoPreviewContainer}>
           {photos.map((photo, index) => (
             <Image
@@ -275,7 +267,6 @@ export default function CreateRegisterForm() {
         </ScrollView>
 
         <Text style={styles.label}>Where did you find it?</Text>
-        {/* Map and Location */}
         <View style={styles.mapContainer}>
           <MapView
             style={styles.map}
@@ -299,7 +290,6 @@ export default function CreateRegisterForm() {
           </TouchableOpacity>
         </View>
 
-        {/* Submit Button */}
         <TouchableOpacity
           style={styles.submitButton}
           onPress={handleSubmit(onSubmit)}
