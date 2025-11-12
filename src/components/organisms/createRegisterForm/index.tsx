@@ -60,6 +60,7 @@ export default function CreateRegisterForm() {
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
@@ -79,13 +80,22 @@ export default function CreateRegisterForm() {
 
   useEffect(() => {
     fetchCategories();
+    initializeUserLocation();
   }, []);
 
   const requestPermissions = async () => {
+    const { status: currentLocationStatus } = 
+      await Location.getForegroundPermissionsAsync();
+    
     const { status: cameraStatus } =
       await ImagePicker.requestCameraPermissionsAsync();
-    const { status: locationStatus } =
-      await Location.requestForegroundPermissionsAsync();
+    
+    let locationStatus = currentLocationStatus;
+    
+    if (currentLocationStatus === 'undetermined') {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      locationStatus = status;
+    }
 
     if (cameraStatus !== "granted" || locationStatus !== "granted") {
       Alert.alert(
@@ -93,11 +103,23 @@ export default function CreateRegisterForm() {
         "We need permission to access camera and location!"
       );
     }
+
+    return locationStatus === "granted";
   };
 
-  const getCurrentLocation = async () => {
+
+
+  const initializeUserLocation = async () => {
     try {
-      const location = await Location.getCurrentPositionAsync({});
+      const hasPermission = await requestPermissions();
+      if (!hasPermission) {
+        return;
+      }
+
+      const location = await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.Balanced,
+      });
+
       setLocation(location);
       setMapRegion({
         latitude: location.coords.latitude,
@@ -105,8 +127,47 @@ export default function CreateRegisterForm() {
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
       });
+      setValue("latitude", location.coords.latitude);
+      setValue("longitude", location.coords.longitude);
     } catch (error) {
-      Alert.alert("Error", "Error getting location");
+      console.error("Error initializing location:", error);
+    }
+  };
+
+
+
+  const getCurrentLocation = async () => {
+    try {
+      const { status } = await Location.requestForegroundPermissionsAsync();
+      
+      if (status !== "granted") {
+        Alert.alert(
+          "Permission Required",
+          "Location permission is required to use this feature. Please enable it in settings."
+        );
+        return;
+      }
+
+      const location = await Location.getCurrentPositionAsync({
+        accuracy: Location.Accuracy.Balanced,
+      });
+      
+      setLocation(location);
+      setMapRegion({
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
+        latitudeDelta: 0.0922,
+        longitudeDelta: 0.0421,
+      });
+      
+      setValue("latitude", location.coords.latitude);
+      setValue("longitude", location.coords.longitude);
+    } catch (error) {
+      console.error("Error getting location:", error);
+      Alert.alert(
+        "Error",
+        "Failed to get your location. Please try again or select a location on the map."
+      );
     }
   };
 
@@ -271,7 +332,11 @@ export default function CreateRegisterForm() {
           <MapView
             style={styles.map}
             region={mapRegion}
-            onRegionChangeComplete={setMapRegion}
+            onRegionChangeComplete={(region) => {
+              setMapRegion(region);
+              setValue("latitude", region.latitude);
+              setValue("longitude", region.longitude);
+            }}
           >
             {location && (
               <Marker
@@ -289,6 +354,17 @@ export default function CreateRegisterForm() {
             <Text style={styles.buttonLocationText}>Use Current Location</Text>
           </TouchableOpacity>
         </View>
+        
+        <Controller
+          control={control}
+          name="latitude"
+          render={() => <></>}
+        />
+        <Controller
+          control={control}
+          name="longitude"
+          render={() => <></>}
+        />
 
         <TouchableOpacity
           style={styles.submitButton}
