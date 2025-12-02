@@ -11,6 +11,9 @@ import { Loading } from "@/components/atoms/loading";
 import { GestureHandlerRootView } from "react-native-gesture-handler";
 import { AuthProvider } from "@/contexts/Authcontext";
 import { PrivateRoute } from "@/components/feature/auth/privateRoute";
+import { useEffect } from "react";
+import { useStatusBar } from "@/hooks/useStatusBar";
+
 export default function Layout() {
   const [fontsLoaded] = useFonts({
     Livvic_400Regular,
@@ -18,6 +21,10 @@ export default function Layout() {
     Livvic_600SemiBold,
     Livvic_700Bold,
   });
+
+  useEffect(() => {
+    useStatusBar("dark");
+  }, []);
 
   if (!fontsLoaded) {
     return <Loading />;

@@ -18,7 +18,6 @@ import { router } from "expo-router";
 import BackButton from "@/components/atoms/backbutton";
 import { Categories } from "@/components/molecules/categories";
 import type { CategoriesProps } from "@/components/molecules/categories";
-import { useStatusBar } from "@/hooks/useStatusBar";
 
 type RegisterProps = PlaceProps & {
   latitude: number;
@@ -30,7 +29,6 @@ export default function Map() {
   const [category, setCategory] = useState<string>("all");
   const [registers, setRegisters] = useState<RegisterProps[]>([]);
 
-  useStatusBar("dark"); 
 
   async function fetchCategories() {
     try {
