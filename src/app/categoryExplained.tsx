@@ -1,7 +1,9 @@
 import CategoryExplained from "@/components/molecules/categoryExplained";
 import { View, StyleSheet } from "react-native";
+import { useStatusBar } from "@/hooks/useStatusBar";
 
 export default function CategoryExplainedPage() {
+  useStatusBar("dark"); 
   return (
     <View style={styles.container}>
       <CategoryExplained />
