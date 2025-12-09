@@ -35,7 +35,7 @@
     <key>CFBundleVersion</key>
     <string>1</string>
     <key>GMSApiKey</key>
-    <string>AIzaSyAoCvAYwB05W-0yrh8luls0Zc3sfxx_Al0</string>
+    <string>${GOOGLE_MAPS_API_KEY}</string>
     <key>LSMinimumSystemVersion</key>
     <string>12.0</string>
     <key>LSRequiresIPhoneOS</key>
