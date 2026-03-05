@@ -1,6 +1,6 @@
-import { StyleSheet } from "react-native";
-import { colors } from "@/styles/colors";
-import { fontFamily, typography } from "@/styles/typography";
+import { StyleSheet } from 'react-native'
+import { colors } from '@/styles/colors'
+import { fontFamily, typography } from '@/styles/typography'
 
 export const styles = StyleSheet.create({
   container: {
@@ -13,7 +13,7 @@ export const styles = StyleSheet.create({
     marginTop: 90,
   },
   backButton: {
-    position: "absolute",
+    position: 'absolute',
     top: 60,
     left: 20,
     zIndex: 1,
@@ -37,7 +37,7 @@ export const styles = StyleSheet.create({
     fontFamily: fontFamily.semiBold,
     fontSize: 24,
     marginBottom: 32,
-    textAlign: "center",
+    textAlign: 'center',
     color: colors.green.dark,
   },
   inputContainer: {
@@ -54,9 +54,9 @@ export const styles = StyleSheet.create({
     fontSize: 12,
   },
   categoryExplainedButtonContainer: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "flex-start",
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'flex-start',
     marginBottom: 12,
   },
   categoryExplainedButton: {
@@ -79,7 +79,7 @@ export const styles = StyleSheet.create({
     ...typography.textMd,
     backgroundColor: colors.gray[100],
     color: colors.gray[600],
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -90,7 +90,7 @@ export const styles = StyleSheet.create({
   },
   textArea: {
     height: 140,
-    textAlignVertical: "top",
+    textAlignVertical: 'top',
   },
   errorText: {
     color: colors.attention.base,
@@ -99,8 +99,8 @@ export const styles = StyleSheet.create({
     marginLeft: 4,
   },
   categoryGrid: {
-    flexDirection: "row",
-    flexWrap: "wrap",
+    flexDirection: 'row',
+    flexWrap: 'wrap',
     gap: 12,
   },
   categoryButton: {
@@ -111,7 +111,7 @@ export const styles = StyleSheet.create({
     borderWidth: 1.5,
     borderColor: colors.gray[200],
     marginBottom: 4,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 2,
@@ -132,10 +132,10 @@ export const styles = StyleSheet.create({
   },
   mapContainer: {
     height: 240,
-    marginVertical: 28,
+    marginBottom: 28,
     borderRadius: 20,
-    overflow: "hidden",
-    shadowColor: "#000",
+    overflow: 'hidden',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 4,
@@ -146,14 +146,22 @@ export const styles = StyleSheet.create({
   map: {
     flex: 1,
   },
+  locationButtonContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flexDirection: 'row',
+    gap: 8,
+    marginBottom: 8,
+  },
   locationButton: {
     backgroundColor: colors.brown.middle,
-
     padding: 16,
     borderRadius: 16,
     marginTop: 16,
-    alignItems: "center",
-    shadowColor: "#000",
+    alignItems: 'center',
+    shadowColor: '#000',
+    height: 50,
+    justifyContent: 'center',
     shadowOffset: {
       width: 0,
       height: 4,
@@ -172,11 +180,11 @@ export const styles = StyleSheet.create({
     backgroundColor: colors.gray[100],
     padding: 16,
     borderRadius: 16,
-    alignItems: "center",
+    alignItems: 'center',
     borderWidth: 2,
     borderColor: colors.brown.strong,
-    borderStyle: "dashed",
-    shadowColor: "#000",
+    borderStyle: 'dashed',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 4,
@@ -185,7 +193,7 @@ export const styles = StyleSheet.create({
     shadowRadius: 8,
   },
   photoPreviewContainer: {
-    flexDirection: "row",
+    flexDirection: 'row',
     marginVertical: 20,
   },
   photoPreview: {
@@ -193,7 +201,7 @@ export const styles = StyleSheet.create({
     height: 140,
     marginRight: 16,
     borderRadius: 16,
-    shadowColor: "#000",
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 4,
@@ -208,8 +216,8 @@ export const styles = StyleSheet.create({
     borderRadius: 16,
     marginTop: 28,
     marginBottom: 40,
-    alignItems: "center",
-    shadowColor: "#000",
+    alignItems: 'center',
+    shadowColor: '#000',
     shadowOffset: {
       width: 0,
       height: 4,
@@ -224,12 +232,12 @@ export const styles = StyleSheet.create({
   },
   loadingContainer: {
     flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: colors.gray[100],
   },
   buttonSubmitText: {
     fontFamily: fontFamily.semiBold,
     color: colors.gray[100],
   },
-});
+})

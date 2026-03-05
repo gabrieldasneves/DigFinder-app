@@ -1,5 +1,5 @@
 // src/app/register-fossil.tsx
-import { useState, useEffect } from "react";
+import { useState, useEffect } from 'react'
 import {
   View,
   ScrollView,
@@ -9,56 +9,56 @@ import {
   Image,
   Alert,
   ActivityIndicator,
-} from "react-native";
-import { useForm, Controller } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
-import * as ImagePicker from "expo-image-picker";
-import * as Location from "expo-location";
-import MapView, { Marker } from "react-native-maps";
-import { Picker } from "@react-native-picker/picker";
-import { api } from "@/services/api";
-import { useRouter } from "expo-router";
-import { styles } from "./styles";
-import { colors } from "@/styles/colors";
-import { Loading } from "../../atoms/loading";
-import BackButton from "@/components/atoms/backbutton";
-import { useAuth } from "@/contexts/Authcontext";
-import { uploadMultipleImages } from "@/services/storage";
+} from 'react-native'
+import { useForm, Controller } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import * as z from 'zod'
+import * as ImagePicker from 'expo-image-picker'
+import * as Location from 'expo-location'
+import MapView, { Marker } from 'react-native-maps'
+import { Picker } from '@react-native-picker/picker'
+import { api } from '@/services/api'
+import { useRouter } from 'expo-router'
+import { styles } from './styles'
+import { colors } from '@/styles/colors'
+import { Loading } from '../../atoms/loading'
+import BackButton from '@/components/atoms/backbutton'
+import { useAuth } from '@/contexts/Authcontext'
+import { uploadMultipleImages } from '@/services/storage'
 
 const registerSchema = z.object({
-  title: z.string().min(3, "Title must have at least 3 characters"),
-  categoryId: z.string().uuid("Please select a category"),
+  title: z.string().min(3, 'Title must have at least 3 characters'),
+  categoryId: z.string().uuid('Please select a category'),
   description: z
     .string()
-    .min(10, "Description must have at least 10 characters"),
+    .min(10, 'Description must have at least 10 characters'),
   latitude: z.number(),
   longitude: z.number(),
-  photos: z.array(z.string()).min(1, "At least one photo is required"),
-});
+  photos: z.array(z.string()).min(1, 'At least one photo is required'),
+})
 
-type RegisterFormData = z.infer<typeof registerSchema>;
+type RegisterFormData = z.infer<typeof registerSchema>
 
 type Category = {
-  id: string;
-  name: string;
-};
+  id: string
+  name: string
+}
 
 export default function CreateRegisterForm() {
-  const router = useRouter();
-  const user = useAuth();
-  const [photos, setPhotos] = useState<string[]>([]);
-  const [location, setLocation] = useState<Location.LocationObject | null>(
-    null
-  );
-  const [categories, setCategories] = useState<Category[]>([]);
-  const [loading, setLoading] = useState(true);
+  const router = useRouter()
+  const user = useAuth()
+  const [address, setAddress] = useState('')
+  const [photos, setPhotos] = useState<string[]>([])
+  const [location, setLocation] = useState<Location.LocationObject | null>(null)
+  const [categories, setCategories] = useState<Category[]>([])
+  const [loading, setLoading] = useState(true)
+  const [locationMode, setLocationMode] = useState<'map' | 'address'>('map')
   const [mapRegion, setMapRegion] = useState({
     latitude: 35.6938,
     longitude: 139.7034,
     latitudeDelta: 0.0922,
     longitudeDelta: 0.0421,
-  });
+  })
 
   const {
     control,
@@ -67,142 +67,156 @@ export default function CreateRegisterForm() {
     formState: { errors },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
-  });
+  })
 
   async function fetchCategories() {
     try {
-      const { data } = await api.get("/categories");
-      setCategories(data);
+      const { data } = await api.get('/categories')
+      setCategories(data)
     } catch (error) {
-      console.log(error);
-      Alert.alert("Categories not found");
+      console.log(error)
+      Alert.alert('Categories not found')
     } finally {
-      setLoading(false);
+      setLoading(false)
     }
   }
 
   useEffect(() => {
-    fetchCategories();
-    initializeUserLocation();
-  }, []);
+    fetchCategories()
+    initializeUserLocation()
+  }, [])
 
   useEffect(() => {
-    setValue("photos", photos);
-  }, [photos, setValue]);
+    setValue('photos', photos)
+  }, [photos, setValue])
 
   const requestPermissions = async () => {
     try {
-      
-      const { status: currentLocationStatus } = 
-        await Location.getForegroundPermissionsAsync();
-      
-     
-      
+      const { status: currentLocationStatus } =
+        await Location.getForegroundPermissionsAsync()
+
       const { status: cameraStatus } =
-        await ImagePicker.requestCameraPermissionsAsync();
-      
-      let locationStatus = currentLocationStatus;
-      
+        await ImagePicker.requestCameraPermissionsAsync()
+
+      let locationStatus = currentLocationStatus
+
       if (currentLocationStatus === 'undetermined') {
-        const { status } = await Location.requestForegroundPermissionsAsync();
-        locationStatus = status;
+        const { status } = await Location.requestForegroundPermissionsAsync()
+        locationStatus = status
       }
 
-      if (cameraStatus !== "granted" || locationStatus !== "granted") {
-        
+      if (cameraStatus !== 'granted' || locationStatus !== 'granted') {
         Alert.alert(
-          "Permission",
-          "We need permission to access camera and location!"
-        );
+          'Permission',
+          'We need permission to access camera and location!',
+        )
       }
 
-      return locationStatus === "granted";
+      return locationStatus === 'granted'
     } catch (error) {
-      return false;
+      return false
     }
-  };
-
-
+  }
 
   const initializeUserLocation = async () => {
     try {
-      
-      const hasPermission = await requestPermissions();
-      
+      const hasPermission = await requestPermissions()
+
       if (!hasPermission) {
-        setValue("latitude", mapRegion.latitude);
-        setValue("longitude", mapRegion.longitude);
-        return;
+        setValue('latitude', mapRegion.latitude)
+        setValue('longitude', mapRegion.longitude)
+        return
       }
 
       const location = await Location.getCurrentPositionAsync({
         accuracy: Location.Accuracy.Balanced,
-       
-      });
+      })
 
-      console.log("Location obtained:", {
+      console.log('Location obtained:', {
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
-      });
+      })
 
-      setLocation(location);
+      setLocation(location)
       setMapRegion({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
-      });
-      
-      setValue("latitude", location.coords.latitude);
-      setValue("longitude", location.coords.longitude);
-      
+      })
+
+      setValue('latitude', location.coords.latitude)
+      setValue('longitude', location.coords.longitude)
     } catch (error) {
-    
-      setValue("latitude", mapRegion.latitude);
-      setValue("longitude", mapRegion.longitude);
+      setValue('latitude', mapRegion.latitude)
+      setValue('longitude', mapRegion.longitude)
       Alert.alert(
-        "Location",
-        "It was not possible to obtain your location. You can select manually on the map."
-      );
+        'Location',
+        'It was not possible to obtain your location. You can select manually on the map.',
+      )
     }
-  };
-
-
+  }
 
   const getCurrentLocation = async () => {
     try {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      
-      if (status !== "granted") {
+      const { status } = await Location.requestForegroundPermissionsAsync()
+
+      if (status !== 'granted') {
         Alert.alert(
-          "Permission Required",
-          "Location permission is required to use this feature. Please enable it in settings."
-        );
-        return;
+          'Permission Required',
+          'Location permission is required to use this feature. Please enable it in settings.',
+        )
+        return
       }
 
       const location = await Location.getCurrentPositionAsync({
         accuracy: Location.Accuracy.High,
-      });
+      })
 
-      setLocation(location);
+      setLocation(location)
       setMapRegion({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
         latitudeDelta: 0.005,
         longitudeDelta: 0.005,
-      });
+      })
 
-      setValue("latitude", location.coords.latitude);
-      setValue("longitude", location.coords.longitude);
+      setValue('latitude', location.coords.latitude)
+      setValue('longitude', location.coords.longitude)
     } catch (error) {
-      console.error("Error getting location:", error);
+      console.error('Error getting location:', error)
       Alert.alert(
-        "Error",
-        "Failed to get your location. Please try again or select a location on the map."
-      );
+        'Error',
+        'Failed to get your location. Please try again or select a location on the map.',
+      )
     }
-  };
+  }
+
+  const handleSearchAddress = async () => {
+    try {
+      const results = await Location.geocodeAsync(address)
+      if (results.length > 0) {
+        const { latitude, longitude } = results[0]
+        setLocation({
+          coords: { latitude, longitude },
+        } as Location.LocationObject)
+        setMapRegion({
+          latitude,
+          longitude,
+          latitudeDelta: 0.005,
+          longitudeDelta: 0.005,
+        })
+        setValue('latitude', latitude)
+        setValue('longitude', longitude)
+        setLocationMode('map')
+      } else {
+        Alert.alert('Address not found', 'Try a more specific address.')
+      }
+    } catch (error) {
+      console.error(error)
+      Alert.alert('Error', 'Failed to search address.')
+    }
+  }
 
   const pickImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
@@ -210,24 +224,22 @@ export default function CreateRegisterForm() {
       allowsEditing: true,
       aspect: [4, 3],
       quality: 1,
-    });
+    })
 
     if (!result.canceled) {
-      setPhotos([...photos, result.assets[0].uri]);
+      setPhotos([...photos, result.assets[0].uri])
     }
-  };
+  }
 
   const onSubmit = async (data: RegisterFormData) => {
     try {
-    
-
       if (!user?.user?.id) {
-        Alert.alert("Error", "User not found");
-        return;
+        Alert.alert('Error', 'User not found')
+        return
       }
 
-      Alert.alert("Uploading images...");
-      const imgUrls = await uploadMultipleImages(photos, user.user.id);
+      Alert.alert('Uploading images...')
+      const imgUrls = await uploadMultipleImages(photos, user.user.id)
 
       const discoveryData = {
         title: data.title,
@@ -237,27 +249,30 @@ export default function CreateRegisterForm() {
         discoveryDate: new Date().toISOString(),
         categoryIds: [data.categoryId],
         imageUrls: imgUrls,
-      };
+      }
 
-      const resposne = await api.post("/discoveries/createDiscovery", discoveryData);
+      const resposne = await api.post(
+        '/discoveries/createDiscovery',
+        discoveryData,
+      )
 
-      console.log("Discovery created successfully:", resposne.data);
+      console.log('Discovery created successfully:', resposne.data)
 
-      Alert.alert("Discovery created successfully");
+      Alert.alert('Discovery created successfully')
 
-      router.back();
+      router.back()
     } catch (error) {
-      console.error("Error creating discovery:", error);
-      Alert.alert("Error", "Failed to create discovery. Please try again.");
+      console.error('Error creating discovery:', error)
+      Alert.alert('Error', 'Failed to create discovery. Please try again.')
     }
-  };
+  }
 
   if (loading) {
     return (
       <View style={styles.loadingContainer}>
         <Loading />
       </View>
-    );
+    )
   }
 
   return (
@@ -303,7 +318,7 @@ export default function CreateRegisterForm() {
                   style={styles.categoryExplainedButton}
                   onPress={() =>
                     router.push({
-                      pathname: "categoryExplained" as any,
+                      pathname: 'categoryExplained' as any,
                       params: { categories: JSON.stringify(categories) },
                     })
                   }
@@ -369,6 +384,105 @@ export default function CreateRegisterForm() {
           )}
         />
 
+        <Text style={styles.label}>Where did you find it?</Text>
+        <View style={styles.locationButtonContainer}>
+          <TouchableOpacity
+            style={[
+              styles.locationButton,
+              { width: '50%' },
+              locationMode === 'map'
+                ? { backgroundColor: colors.green.dark }
+                : { backgroundColor: colors.gray[100] },
+            ]}
+            onPress={() => setLocationMode('map')}
+          >
+            <Text
+              style={[
+                styles.buttonLocationText,
+                locationMode === 'map'
+                  ? { color: colors.gray[100] }
+                  : { color: colors.green.dark },
+              ]}
+            >
+              Map
+            </Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            style={[
+              styles.locationButton,
+              { width: '50%' },
+              locationMode === 'address'
+                ? { backgroundColor: colors.green.dark }
+                : { backgroundColor: colors.gray[100] },
+            ]}
+            onPress={() => setLocationMode('address')}
+          >
+            <Text
+              style={[
+                styles.buttonLocationText,
+                locationMode === 'address'
+                  ? { color: colors.gray[100] }
+                  : { color: colors.green.dark },
+              ]}
+            >
+              Address
+            </Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.mapContainer}>
+          {locationMode === 'map' && (
+            <>
+              <MapView
+                style={styles.map}
+                region={mapRegion}
+                onRegionChangeComplete={(region) => {
+                  setMapRegion(region)
+                  setValue('latitude', region.latitude)
+                  setValue('longitude', region.longitude)
+                }}
+              >
+                {location && (
+                  <Marker
+                    coordinate={{
+                      latitude: location.coords.latitude,
+                      longitude: location.coords.longitude,
+                    }}
+                  />
+                )}
+              </MapView>
+              <TouchableOpacity
+                style={styles.locationButton}
+                onPress={getCurrentLocation}
+              >
+                <Text style={styles.buttonLocationText}>
+                  Use Current Location
+                </Text>
+              </TouchableOpacity>
+            </>
+          )}
+          {locationMode === 'address' && (
+            <View>
+              <TextInput
+                style={styles.input}
+                placeholder="Enter address"
+                value={address}
+                onChangeText={setAddress}
+                onSubmitEditing={handleSearchAddress}
+                returnKeyType="search"
+              />
+              <TouchableOpacity
+                style={styles.locationButton}
+                onPress={handleSearchAddress}
+              >
+                <Text style={styles.buttonLocationText}>Search Address</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+        </View>
+
+        <Controller control={control} name="latitude" render={() => <></>} />
+        <Controller control={control} name="longitude" render={() => <></>} />
+
         <View style={styles.photoContainer}>
           <Text style={styles.label}>Add photos</Text>
           <TouchableOpacity style={styles.photoButton} onPress={pickImage}>
@@ -386,45 +500,6 @@ export default function CreateRegisterForm() {
           ))}
         </ScrollView>
 
-        <Text style={styles.label}>Where did you find it?</Text>
-        <View style={styles.mapContainer}>
-          <MapView
-            style={styles.map}
-            region={mapRegion}
-            onRegionChangeComplete={(region) => {
-              setMapRegion(region);
-              setValue("latitude", region.latitude);
-              setValue("longitude", region.longitude);
-            }}
-          >
-            {location && (
-              <Marker
-                coordinate={{
-                  latitude: location.coords.latitude,
-                  longitude: location.coords.longitude,
-                }}
-              />
-            )}
-          </MapView>
-          <TouchableOpacity
-            style={styles.locationButton}
-            onPress={getCurrentLocation}
-          >
-            <Text style={styles.buttonLocationText}>Use Current Location</Text>
-          </TouchableOpacity>
-        </View>
-        
-        <Controller
-          control={control}
-          name="latitude"
-          render={() => <></>}
-        />
-        <Controller
-          control={control}
-          name="longitude"
-          render={() => <></>}
-        />
-
         <TouchableOpacity
           style={styles.submitButton}
           onPress={handleSubmit(onSubmit)}
@@ -433,5 +508,5 @@ export default function CreateRegisterForm() {
         </TouchableOpacity>
       </ScrollView>
     </View>
-  );
+  )
 }
