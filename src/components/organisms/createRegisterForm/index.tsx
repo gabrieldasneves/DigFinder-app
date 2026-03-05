@@ -23,6 +23,8 @@ import { styles } from "./styles";
 import { colors } from "@/styles/colors";
 import { Loading } from "../../atoms/loading";
 import BackButton from "@/components/atoms/backbutton";
+import { useAuth } from "@/contexts/Authcontext";
+import { uploadMultipleImages } from "@/services/storage";
 
 const registerSchema = z.object({
   title: z.string().min(3, "Title must have at least 3 characters"),
@@ -44,6 +46,7 @@ type Category = {
 
 export default function CreateRegisterForm() {
   const router = useRouter();
+  const user = useAuth();
   const [photos, setPhotos] = useState<string[]>([]);
   const [location, setLocation] = useState<Location.LocationObject | null>(
     null
@@ -83,41 +86,63 @@ export default function CreateRegisterForm() {
     initializeUserLocation();
   }, []);
 
+  useEffect(() => {
+    setValue("photos", photos);
+  }, [photos, setValue]);
+
   const requestPermissions = async () => {
-    const { status: currentLocationStatus } = 
-      await Location.getForegroundPermissionsAsync();
-    
-    const { status: cameraStatus } =
-      await ImagePicker.requestCameraPermissionsAsync();
-    
-    let locationStatus = currentLocationStatus;
-    
-    if (currentLocationStatus === 'undetermined') {
-      const { status } = await Location.requestForegroundPermissionsAsync();
-      locationStatus = status;
-    }
+    try {
+      
+      const { status: currentLocationStatus } = 
+        await Location.getForegroundPermissionsAsync();
+      
+     
+      
+      const { status: cameraStatus } =
+        await ImagePicker.requestCameraPermissionsAsync();
+      
+      let locationStatus = currentLocationStatus;
+      
+      if (currentLocationStatus === 'undetermined') {
+        const { status } = await Location.requestForegroundPermissionsAsync();
+        locationStatus = status;
+      }
 
-    if (cameraStatus !== "granted" || locationStatus !== "granted") {
-      Alert.alert(
-        "Permission",
-        "We need permission to access camera and location!"
-      );
-    }
+      if (cameraStatus !== "granted" || locationStatus !== "granted") {
+        
+        Alert.alert(
+          "Permission",
+          "We need permission to access camera and location!"
+        );
+      }
 
-    return locationStatus === "granted";
+      return locationStatus === "granted";
+    } catch (error) {
+      return false;
+    }
   };
 
 
 
   const initializeUserLocation = async () => {
     try {
+      
       const hasPermission = await requestPermissions();
+      
       if (!hasPermission) {
+        setValue("latitude", mapRegion.latitude);
+        setValue("longitude", mapRegion.longitude);
         return;
       }
 
       const location = await Location.getCurrentPositionAsync({
         accuracy: Location.Accuracy.Balanced,
+       
+      });
+
+      console.log("Location obtained:", {
+        latitude: location.coords.latitude,
+        longitude: location.coords.longitude,
       });
 
       setLocation(location);
@@ -127,10 +152,18 @@ export default function CreateRegisterForm() {
         latitudeDelta: 0.0922,
         longitudeDelta: 0.0421,
       });
+      
       setValue("latitude", location.coords.latitude);
       setValue("longitude", location.coords.longitude);
+      
     } catch (error) {
-      console.error("Error initializing location:", error);
+    
+      setValue("latitude", mapRegion.latitude);
+      setValue("longitude", mapRegion.longitude);
+      Alert.alert(
+        "Location",
+        "It was not possible to obtain your location. You can select manually on the map."
+      );
     }
   };
 
@@ -149,17 +182,17 @@ export default function CreateRegisterForm() {
       }
 
       const location = await Location.getCurrentPositionAsync({
-        accuracy: Location.Accuracy.Balanced,
+        accuracy: Location.Accuracy.High,
       });
-      
+
       setLocation(location);
       setMapRegion({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
+        latitudeDelta: 0.005,
+        longitudeDelta: 0.005,
       });
-      
+
       setValue("latitude", location.coords.latitude);
       setValue("longitude", location.coords.longitude);
     } catch (error) {
@@ -186,10 +219,36 @@ export default function CreateRegisterForm() {
 
   const onSubmit = async (data: RegisterFormData) => {
     try {
-      console.log(data);
-    //   await api.post("/createDiscovery",data)
+    
+
+      if (!user?.user?.id) {
+        Alert.alert("Error", "User not found");
+        return;
+      }
+
+      Alert.alert("Uploading images...");
+      const imgUrls = await uploadMultipleImages(photos, user.user.id);
+
+      const discoveryData = {
+        title: data.title,
+        description: data.description,
+        latitude: data.latitude,
+        longitude: data.longitude,
+        discoveryDate: new Date().toISOString(),
+        categoryIds: [data.categoryId],
+        imageUrls: imgUrls,
+      };
+
+      const resposne = await api.post("/discoveries/createDiscovery", discoveryData);
+
+      console.log("Discovery created successfully:", resposne.data);
+
+      Alert.alert("Discovery created successfully");
+
+      router.back();
     } catch (error) {
-      Alert.alert("Erro", "Erro ao enviar formulário");
+      console.error("Error creating discovery:", error);
+      Alert.alert("Error", "Failed to create discovery. Please try again.");
     }
   };
 

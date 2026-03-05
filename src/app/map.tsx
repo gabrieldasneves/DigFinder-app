@@ -6,6 +6,7 @@ import {
     TouchableOpacity,
     StyleSheet,
     Platform,
+    Image,
   } from "react-native";
   import { api } from "@/services/api";
   import { useEffect, useState } from "react";
@@ -127,9 +128,13 @@ import {
                 latitude: item.latitude,
                 longitude: item.longitude,
               }}
-              image={require("@/assets/pin.png")}
               tracksViewChanges={false}
             >
+              <Image
+                source={require("@/assets/pin.png")}
+                style={{ width: 15, height: 15 }}
+                resizeMode="contain"
+              />
               {useGoogleMaps ? (
                 <Callout onPress={() => router.push(`/register/${item.id}`)}>
                   <View>
