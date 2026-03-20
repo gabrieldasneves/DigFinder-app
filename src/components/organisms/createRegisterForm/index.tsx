@@ -47,12 +47,11 @@ type Category = {
 export default function CreateRegisterForm() {
   const router = useRouter()
   const user = useAuth()
-  const [address, setAddress] = useState('')
   const [photos, setPhotos] = useState<string[]>([])
   const [location, setLocation] = useState<Location.LocationObject | null>(null)
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
-  const [locationMode, setLocationMode] = useState<'map' | 'address'>('map')
+  const [locationMode, setLocationMode] = useState<'map' | 'gps'>('map')
   const [mapRegion, setMapRegion] = useState({
     latitude: 35.6938,
     longitude: 139.7034,
@@ -189,32 +188,6 @@ export default function CreateRegisterForm() {
         'Error',
         'Failed to get your location. Please try again or select a location on the map.',
       )
-    }
-  }
-
-  const handleSearchAddress = async () => {
-    try {
-      const results = await Location.geocodeAsync(address)
-      if (results.length > 0) {
-        const { latitude, longitude } = results[0]
-        setLocation({
-          coords: { latitude, longitude },
-        } as Location.LocationObject)
-        setMapRegion({
-          latitude,
-          longitude,
-          latitudeDelta: 0.005,
-          longitudeDelta: 0.005,
-        })
-        setValue('latitude', latitude)
-        setValue('longitude', longitude)
-        setLocationMode('map')
-      } else {
-        Alert.alert('Address not found', 'Try a more specific address.')
-      }
-    } catch (error) {
-      console.error(error)
-      Alert.alert('Error', 'Failed to search address.')
     }
   }
 
@@ -411,74 +384,61 @@ export default function CreateRegisterForm() {
             style={[
               styles.locationButton,
               { width: '50%' },
-              locationMode === 'address'
+              locationMode === 'gps'
                 ? { backgroundColor: colors.green.dark }
                 : { backgroundColor: colors.gray[100] },
             ]}
-            onPress={() => setLocationMode('address')}
+            onPress={() => setLocationMode('gps')}
           >
             <Text
               style={[
                 styles.buttonLocationText,
-                locationMode === 'address'
+                locationMode === 'gps'
                   ? { color: colors.gray[100] }
                   : { color: colors.green.dark },
               ]}
             >
-              Address
+              Use my location
             </Text>
           </TouchableOpacity>
         </View>
-        <View style={styles.mapContainer}>
-          {locationMode === 'map' && (
-            <>
-              <MapView
-                style={styles.map}
-                region={mapRegion}
-                onRegionChangeComplete={(region) => {
-                  setMapRegion(region)
-                  setValue('latitude', region.latitude)
-                  setValue('longitude', region.longitude)
-                }}
-              >
-                {location && (
-                  <Marker
-                    coordinate={{
-                      latitude: location.coords.latitude,
-                      longitude: location.coords.longitude,
-                    }}
-                  />
-                )}
-              </MapView>
-              <TouchableOpacity
-                style={styles.locationButton}
-                onPress={getCurrentLocation}
-              >
-                <Text style={styles.buttonLocationText}>
-                  Use Current Location
-                </Text>
-              </TouchableOpacity>
-            </>
-          )}
-          {locationMode === 'address' && (
-            <View>
-              <TextInput
-                style={styles.input}
-                placeholder="Enter address"
-                value={address}
-                onChangeText={setAddress}
-                onSubmitEditing={handleSearchAddress}
-                returnKeyType="search"
-              />
-              <TouchableOpacity
-                style={styles.locationButton}
-                onPress={handleSearchAddress}
-              >
-                <Text style={styles.buttonLocationText}>Search Address</Text>
-              </TouchableOpacity>
-            </View>
-          )}
-        </View>
+        {locationMode === 'map' && (
+          <View style={styles.mapContainer}>
+            <MapView
+              style={styles.map}
+              region={mapRegion}
+              onRegionChangeComplete={(region) => {
+                setMapRegion(region)
+                setValue('latitude', region.latitude)
+                setValue('longitude', region.longitude)
+              }}
+            >
+              {location && (
+                <Marker
+                  coordinate={{
+                    latitude: location.coords.latitude,
+                    longitude: location.coords.longitude,
+                  }}
+                />
+              )}
+            </MapView>
+          </View>
+        )}
+        {locationMode === 'gps' && (
+          <View style={styles.gpsLocationPanel}>
+            <Text style={styles.gpsHelpText}>
+              Stand where you made the find (or as close as is safe), then tap
+              below. Switch to Map if you need to fine-tune the pin.
+            </Text>
+
+            {location != null && (
+              <Text style={styles.coordsHint}>
+                Coordinates saved: {location.coords.latitude.toFixed(5)},{' '}
+                {location.coords.longitude.toFixed(5)}
+              </Text>
+            )}
+          </View>
+        )}
 
         <Controller control={control} name="latitude" render={() => <></>} />
         <Controller control={control} name="longitude" render={() => <></>} />
