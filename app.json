@@ -1,42 +1,63 @@
 {
-    "expo": {
-      "name": "paleo",
-      "slug": "paleo",
-      "version": "1.0.0",
-      "orientation": "portrait",
-      "icon": "./assets/images/splash-icon.png",
-      "scheme": "myapp",
-      "userInterfaceStyle": "automatic",
-      "newArchEnabled": true,
-      "splash": {
-        "image": "./src/assets/BackgroundSplashScreen.png",
-        "resizeMode": "cover",
+  "expo": {
+    "name": "DigFinder",
+    "slug": "DigFinder",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/app-icon.png",
+    "scheme": "myapp",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./assets/images/app-icon.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#5A3725",
+      "dark": {
+        "image": "./assets/images/app-icon.png",
+        "resizeMode": "contain",
         "backgroundColor": "#5A3725"
-      },
-      "ios": {
-        "bundleIdentifier": "com.anonymous.paleo",
-        "config": {
-          "googleMapsApiKey": "${GOOGLE_MAPS_API_KEY}"
+      }
+    },
+    "ios": {
+      "bundleIdentifier": "com.anonymous.paleo",
+      "config": {
+        "googleMapsApiKey": "${GOOGLE_MAPS_API_KEY}"
+      }
+    },
+    "android": {
+      "package": "com.anonymous.paleo",
+      "config": {
+        "googleMaps": {
+          "apiKey": "${GOOGLE_MAPS_API_KEY}"
         }
-      },
-      "android": {
-        "package": "com.anonymous.paleo",
-        "config": {
-          "googleMaps": {
-            "apiKey": "${GOOGLE_MAPS_API_KEY}"
+      }
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/favicon.png"
+    },
+    "plugins": [
+      "./plugins/with-ios-brown-window.js",
+      [
+        "expo-splash-screen",
+        {
+          "image": "./assets/images/app-icon.png",
+          "resizeMode": "contain",
+          "backgroundColor": "#5A3725",
+          "imageWidth": 280,
+          "dark": {
+            "image": "./assets/images/app-icon.png",
+            "resizeMode": "contain",
+            "backgroundColor": "#5A3725",
+            "imageWidth": 280
           }
         }
-      },
-      "web": {
-        "bundler": "metro",
-        "output": "static",
-        "favicon": "./assets/images/favicon.png"
-      },
-      "plugins": [
-        "expo-router"
       ],
-      "experiments": {
-        "typedRoutes": true
-      }
+      "expo-router"
+    ],
+    "experiments": {
+      "typedRoutes": true
     }
   }
+}

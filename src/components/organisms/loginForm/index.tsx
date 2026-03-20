@@ -1,8 +1,9 @@
-import { View, Text, TextInput, TouchableOpacity, Linking } from "react-native";
+import { View, Text, TextInput, TouchableOpacity } from "react-native";
 import { styles } from "./styles";
 import { useState } from "react";
 import { useAuth } from "@/contexts/Authcontext";
-import { router } from "expo-router";
+
+const placeholderColor = "rgba(26, 31, 36, 0.45)";
 
 export default function LoginForm() {
   const [email, setEmail] = useState("");
@@ -12,15 +13,9 @@ export default function LoginForm() {
   const handleLogin = async () => {
     try {
       await signIn(email, password);
-      //   router.replace("/home" as any);
     } catch (error) {
-      // Tratar erro de login
       console.error(error);
     }
-  };
-
-  const handleCreateAccount = () => {
-    router.push("/auth/createAccount" as any);
   };
 
   return (
@@ -28,29 +23,29 @@ export default function LoginForm() {
       <View style={styles.formContainer}>
         <Text style={styles.title}>Login</Text>
 
+        <Text style={styles.label}>Email</Text>
         <TextInput
           style={styles.input}
           placeholder="Email"
+          placeholderTextColor={placeholderColor}
           value={email}
           onChangeText={setEmail}
           keyboardType="email-address"
           autoCapitalize="none"
         />
 
+        <Text style={styles.label}>password</Text>
         <TextInput
           style={styles.input}
           placeholder="Password"
+          placeholderTextColor={placeholderColor}
           value={password}
           onChangeText={setPassword}
           secureTextEntry
         />
 
         <TouchableOpacity style={styles.button} onPress={handleLogin}>
-          <Text style={styles.buttonText}>Entrar</Text>
-        </TouchableOpacity>
-
-        <TouchableOpacity style={styles.link} onPress={handleCreateAccount}>
-          <Text style={styles.linkText}>Criar conta</Text>
+          <Text style={styles.buttonText}>Log in</Text>
         </TouchableOpacity>
       </View>
     </View>

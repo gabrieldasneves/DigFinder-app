@@ -1,7 +1,8 @@
 import { useEffect } from "react";
+import { View } from "react-native";
 import { useRouter, useSegments } from "expo-router";
 import { useAuth } from "@/contexts/Authcontext";
-import { Loading } from "@/components/atoms/loading";
+import { colors } from "@/styles/colors";
 
 export function PrivateRoute({ children }: { children: React.ReactNode }) {
   const { isAuthenticated, loading } = useAuth();
@@ -11,18 +12,20 @@ export function PrivateRoute({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (loading) return;
 
-    const inAuthGroup = segments[0] === "auth";
-    const currentPath = segments.join("/");
+    const path = segments.join("/");
+    const isLanding = path === "" || path === "index";
 
-    if (!isAuthenticated && !inAuthGroup && currentPath !== "") {
+    if (!isAuthenticated && !isLanding) {
       router.replace("/");
-    } else if (isAuthenticated && inAuthGroup) {
+    } else if (isAuthenticated && isLanding) {
       router.replace("/home" as any);
     }
   }, [isAuthenticated, loading, segments]);
 
   if (loading) {
-    return <Loading />;
+    return (
+      <View style={{ flex: 1, backgroundColor: colors.brown.strong }} />
+    );
   }
 
   return <>{children}</>;

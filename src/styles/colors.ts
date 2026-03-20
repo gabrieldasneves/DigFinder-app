@@ -37,4 +37,10 @@ export const colors = {
     light: "#FDEDED",
     base: "#BC002D",
   },
-};
+  auth: {
+    primary: "#4B5320",
+    glassFill: "rgba(255, 255, 255, 0.22)",
+    glassBorder: "rgba(255, 255, 255, 0.45)",
+    inputFill: "#F2E6D3",
+  },
+}
