@@ -118,13 +118,18 @@ export default function Map() {
         buttonStyle={styles.backButton}
       />
 
-      <Categories data={categories} selected={category} onSelect={setCategory} />
+      <Categories
+        data={categories}
+        selected={category}
+        onSelect={setCategory}
+      />
 
       <MapView
         provider={useGoogleMaps ? PROVIDER_GOOGLE : undefined}
         style={{ flex: 1 }}
         customMapStyle={useGoogleMaps ? mapStyle : undefined}
         region={initialRegion}
+        showsUserLocation={true}
       >
         {discoveries.map((item) => (
           <Marker
@@ -135,7 +140,7 @@ export default function Map() {
             <Image
               source={require('@/assets/pin.png')}
               style={{ width: 15, height: 15 }}
-              resizeMode='contain'
+              resizeMode="contain"
             />
             <Callout onPress={() => router.push(`/register/${item.id}`)}>
               <View>
