@@ -1,6 +1,6 @@
 import { Stack } from "expo-router";
 import { useEffect } from "react";
-import { View } from "react-native";
+import { ImageBackground, View } from "react-native";
 import * as SystemUI from "expo-system-ui";
 import { colors } from "../styles/colors";
 import {
@@ -29,7 +29,7 @@ export default function Layout() {
     Livvic_700Bold,
   });
 
-  useStatusBar("dark");
+  useStatusBar(fontsLoaded ? "dark" : "light");
 
   useEffect(() => {
     void SystemUI.setBackgroundColorAsync(splashBrown);
@@ -42,8 +42,14 @@ export default function Layout() {
   }, [fontsLoaded]);
 
   if (!fontsLoaded) {
-    return (
-      <View style={{ flex: 1, backgroundColor: splashBrown }} />
+\    return (
+      <ImageBackground
+        source={require("../../assets/images/splash-background.png")}
+        style={{ flex: 1 }}
+        resizeMode="cover"
+      >
+        <View style={{ flex: 1 }} />
+      </ImageBackground>
     );
   }
 

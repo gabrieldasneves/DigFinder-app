@@ -9,14 +9,23 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "splash": {
-      "image": "./assets/images/app-icon.png",
+      "image": "./assets/images/splash-background.png",
       "resizeMode": "contain",
       "backgroundColor": "#5A3725",
       "dark": {
-        "image": "./assets/images/app-icon.png",
+        "image": "./assets/images/splash-background.png",
         "resizeMode": "contain",
         "backgroundColor": "#5A3725"
       }
+    },
+    "androidStatusBar": {
+      "barStyle": "light-content",
+      "backgroundColor": "#5A3725",
+      "translucent": false
+    },
+    "androidNavigationBar": {
+      "barStyle": "light-content",
+      "backgroundColor": "#5A3725"
     },
     "ios": {
       "bundleIdentifier": "com.anonymous.paleo",
@@ -42,15 +51,13 @@
       [
         "expo-splash-screen",
         {
-          "image": "./assets/images/app-icon.png",
+          "image": "./assets/images/splash-background.png",
           "resizeMode": "contain",
           "backgroundColor": "#5A3725",
-          "imageWidth": 280,
           "dark": {
-            "image": "./assets/images/app-icon.png",
+            "image": "./assets/images/splash-background.png",
             "resizeMode": "contain",
-            "backgroundColor": "#5A3725",
-            "imageWidth": 280
+            "backgroundColor": "#5A3725"
           }
         }
       ],

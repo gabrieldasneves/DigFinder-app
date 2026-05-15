@@ -2,11 +2,14 @@
   "name": "paleo",
   "main": "expo-router/entry",
   "version": "1.0.0",
+  "engines": {
+    "node": ">=20.0.0"
+  },
   "scripts": {
-    "start": "npx expo start",
-    "android": "npx expo start --android",
-    "ios": "npx expo start --ios",
-    "web": "npx expo start --web",
+    "start": "node -r ./scripts/node-array-methods-polyfill.cjs ./node_modules/expo/bin/cli start",
+    "android": "node -r ./scripts/node-array-methods-polyfill.cjs ./node_modules/expo/bin/cli start --android",
+    "ios": "node -r ./scripts/node-array-methods-polyfill.cjs ./node_modules/expo/bin/cli start --ios",
+    "web": "node -r ./scripts/node-array-methods-polyfill.cjs ./node_modules/expo/bin/cli start --web",
     "test": "jest --watchAll"
   },
   "jest": {
