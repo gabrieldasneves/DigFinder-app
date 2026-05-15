@@ -1,13 +1,4 @@
-import {
-  View,
-  Text,
-  Alert,
-  Dimensions,
-  TouchableOpacity,
-  StyleSheet,
-  Platform,
-  Image,
-} from 'react-native'
+import { View, Text, Alert, StyleSheet, Platform, Image } from 'react-native'
 import { api } from '@/services/api'
 import { useEffect, useState } from 'react'
 import type { DiscoveryProps } from '@/components/atoms/place'
@@ -42,6 +33,10 @@ export default function Map() {
   const [categories, setCategories] = useState<CategoriesProps>([])
   const [category, setCategory] = useState<string>('all')
   const [discoveries, setDiscoveries] = useState<DiscoveryMapItem[]>([])
+  const [userCoordinate, setUserCoordinate] = useState<{
+    latitude: number
+    longitude: number
+  } | null>(null)
   const [initialRegion, setInitialRegion] = useState({
     ...BRAZIL_CENTER,
     latitudeDelta: 30,
@@ -83,14 +78,20 @@ export default function Map() {
     }
   }
 
+  const userLocationPin = Image.resolveAssetSource(
+    require('@/assets/location.png'),
+  )
+
   async function getCurrentLocation() {
     try {
       const { granted } = await Location.requestForegroundPermissionsAsync()
       if (granted) {
         const location = await Location.getCurrentPositionAsync()
+        const { latitude, longitude } = location.coords
+        setUserCoordinate({ latitude, longitude })
         setInitialRegion({
-          latitude: location.coords.latitude,
-          longitude: location.coords.longitude,
+          latitude,
+          longitude,
           latitudeDelta: 0.05,
           longitudeDelta: 0.05,
         })
@@ -129,8 +130,20 @@ export default function Map() {
         style={{ flex: 1 }}
         customMapStyle={useGoogleMaps ? mapStyle : undefined}
         region={initialRegion}
-        showsUserLocation={true}
+        showsUserLocation={false}
       >
+        {userCoordinate ? (
+          <Marker
+            coordinate={userCoordinate}
+            image={userLocationPin}
+            style={{ width: 75, height: 75 }}
+            anchor={{ x: 0.5, y: 0.5 }}
+            tracksViewChanges={false}
+            zIndex={1000}
+            rotation={0}
+          />
+        ) : null}
+
         {discoveries.map((item) => (
           <Marker
             key={item.id}
