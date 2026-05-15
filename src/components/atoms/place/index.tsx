@@ -1,37 +1,35 @@
-import { TouchableOpacity, View, Text, Image } from "react-native";
+import { TouchableOpacity, View, Text, Image } from 'react-native'
+import { styles } from './styles'
+import { TouchableOpacityProps } from 'react-native'
 
-import { styles } from "./styles";
-import { IconTicket } from "@tabler/icons-react-native";
-import { TouchableOpacityProps } from "react-native";
-
-export type PlaceProps = {
-  id: string;
-  name: string;
-  description: string;
-  address: string;
-  cover: string;
-};
+export type DiscoveryProps = {
+  id: string
+  title: string
+  description: string | null
+  imageUrl?: string
+}
 
 type Props = TouchableOpacityProps & {
-  data: PlaceProps;
-};
+  data: DiscoveryProps
+}
 
 export function Place({ data, ...rest }: Props) {
   return (
     <TouchableOpacity style={styles.container} {...rest}>
       <Image
         style={styles.image}
-        source={require("../../../assets/avatarImg.png")}
+        source={
+          data.imageUrl
+            ? { uri: data.imageUrl }
+            : require('../../../assets/avatarImg.png')
+        }
       />
       <View style={styles.content}>
-        <Text style={styles.name}>{data.name}</Text>
+        <Text style={styles.name}>{data.title}</Text>
         <Text style={styles.description} numberOfLines={2}>
-          {data.description}
+          {data.description ?? 'No description provided.'}
         </Text>
-        <View style={styles.footer}>
-          <IconTicket />
-        </View>
       </View>
     </TouchableOpacity>
-  );
+  )
 }

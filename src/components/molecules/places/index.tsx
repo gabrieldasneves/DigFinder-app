@@ -1,14 +1,14 @@
 import { useWindowDimensions, View, Text } from "react-native";
 import { styles } from "./styles";
 import { useRef } from "react";
-import type { PlaceProps } from "@/components/atoms/place";
+import type { DiscoveryProps } from '@/components/atoms/place'
 import BottomSheet, { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import { router } from "expo-router";
 import { Place } from "@/components/atoms/place";
 
 type Props = {
-  data: PlaceProps[];
-};
+  data: DiscoveryProps[]
+}
 
 export function Places({ data }: Props) {
   const dimensions = useWindowDimensions();
@@ -36,7 +36,7 @@ export function Places({ data }: Props) {
         )}
         contentContainerStyle={styles.content}
         ListHeaderComponent={() => (
-          <Text style={styles.title}>Check out places near you</Text>
+          <Text style={styles.title}>Discoveries near you</Text>
         )}
         showsVerticalScrollIndicator={false}
       />
