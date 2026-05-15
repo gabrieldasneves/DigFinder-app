@@ -1,4 +1,4 @@
-import { View, Text, Alert, StyleSheet, Platform, Image } from 'react-native'
+import { View, Text, Alert, StyleSheet, Image } from 'react-native'
 import { api } from '@/services/api'
 import { useEffect, useState } from 'react'
 import type { DiscoveryProps } from '@/components/atoms/place'
@@ -110,8 +110,6 @@ export default function Map() {
     fetchDiscoveries()
   }, [category])
 
-  const useGoogleMaps = Platform.OS === 'android'
-
   return (
     <View style={{ flex: 1, backgroundColor: '#cecece' }}>
       <BackButton
@@ -126,9 +124,9 @@ export default function Map() {
       />
 
       <MapView
-        provider={useGoogleMaps ? PROVIDER_GOOGLE : undefined}
+        provider={PROVIDER_GOOGLE}
         style={{ flex: 1 }}
-        customMapStyle={useGoogleMaps ? mapStyle : undefined}
+        customMapStyle={mapStyle}
         region={initialRegion}
         showsUserLocation={false}
       >
