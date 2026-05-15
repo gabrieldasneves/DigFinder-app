@@ -2,7 +2,7 @@
 
 ## Workspace Context
 
-This repo (`Digfinder-app`) lives in the same parent folder as `Digfinder-server` — they are **two independent git repos**, not a monorepo. They communicate over HTTP at `http://localhost:3333`. When working here, only this repo is in scope.
+This repo (`Digfinder-app`) lives in the same parent folder as `Digfinder-server` — they are **two independent git repos**, not a monorepo. They communicate over HTTP; the app uses `src/services/api.ts` with **`EXPO_PUBLIC_API_URL`** na LAN (celular físico) ou **`http://localhost:3333`** quando a variável está omitida (simulador / web). When working here, only this repo is in scope.
 
 **To run the server** (required for any API call to work):
 ```bash
@@ -14,10 +14,13 @@ npm start   # tsx watch src/server.ts → port 3333
 ```bash
 npm start   # or: npm run android / npm run ios
 ```
-On a physical Android device, replace `localhost` in `src/services/api.ts` with the host machine's LAN IP.
+**Celular físico (Expo Go / dev build):** defina `EXPO_PUBLIC_API_URL` no `.env` com a URL LAN do Mac, ex.: `http://192.168.1.4:3333` (mesma rede que o Metro). No telefone, `localhost` é o próprio aparelho — não serve para o Digfinder-server no Mac.
+
+**Checklist:** servidor rodando (`npm start` em `Digfinder-server`); Mac e celular na mesma Wi‑Fi; firewall permitindo porta **3333**; reinicie o Metro após mudar `.env`.
 
 **Required `.env` variables (this repo):**
 ```
+EXPO_PUBLIC_API_URL=http://<LAN_IP_DO_MAC>:3333   ← obrigatório no celular físico; omitir no simulador (usa localhost)
 EXPO_PUBLIC_GOOGLE_MAPS_API_KEY=<google-maps-key>
 EXPO_PUBLIC_FIREBASE_API_KEY=<firebase-web-api-key>        ← separate from Maps key
 EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET=<project>.appspot.com
@@ -37,7 +40,7 @@ The project was adapted from an NLW Pocket tutorial (a coupon/nearby-markets app
 
 - **Expo SDK ~54 / React Native 0.81.5**
 - **Expo Router v6** — file-based routing (similar to Next.js for mobile)
-- **Axios** — HTTP client, single shared instance pointed at `http://localhost:3333`
+- **Axios** — HTTP client, single shared instance; `baseURL` from `EXPO_PUBLIC_API_URL` or `http://localhost:3333` (`src/services/api.ts`)
 - **React Context API** — only global state mechanism (no Redux, Zustand, etc.)
 - **React Hook Form + Zod** — form state and validation (used only in the create-discovery form; auth forms use raw `useState`)
 - **`@react-native-async-storage/async-storage`** — JWT token persistence
@@ -224,5 +227,6 @@ Every screen fetches its data fresh on mount with no caching. There is no global
 
 | Variable | Description | Notes |
 |---|---|---|
+| `EXPO_PUBLIC_API_URL` | REST API base URL for Axios | Physical device: `http://<Mac-LAN-IP>:3333`. Simulator: omit (defaults to `http://localhost:3333`). |
 | `EXPO_PUBLIC_GOOGLE_MAPS_API_KEY` | Google Maps API key | Also incorrectly used as Firebase `apiKey` — should be separated |
 | `EXPO_PUBLIC_FIREBASE_API_KEY` | Firebase API key | Should be added as a dedicated variable |

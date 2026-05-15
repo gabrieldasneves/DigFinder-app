@@ -42,7 +42,7 @@ export default function Layout() {
   }, [fontsLoaded]);
 
   if (!fontsLoaded) {
-\    return (
+    return (
       <ImageBackground
         source={require("../../assets/images/splash-background.png")}
         style={{ flex: 1 }}
