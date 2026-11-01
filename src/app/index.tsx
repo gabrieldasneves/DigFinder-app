@@ -14,7 +14,7 @@ type AuthView = "landing" | "login" | "signup";
 export default function Index() {
   const navigation = useNavigation();
   const [view, setView] = useState<AuthView>("landing");
-  useStatusBar("light");
+  useStatusBar(view === "landing" ? "light" : "dark");
 
   useLayoutEffect(() => {
     navigation.setOptions({

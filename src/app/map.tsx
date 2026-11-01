@@ -13,6 +13,7 @@ import BackButton from '@/components/atoms/backbutton'
 import { Categories } from '@/components/molecules/categories'
 import type { CategoriesProps } from '@/components/molecules/categories'
 import { mapStyle } from '@/styles/map'
+import { useStatusBar } from '@/hooks/useStatusBar'
 
 type DiscoveryMapItem = DiscoveryProps & {
   latitude: number
@@ -31,6 +32,7 @@ type ApiDiscovery = {
 const BRAZIL_CENTER = { latitude: -15.77, longitude: -47.92 }
 
 export default function Map() {
+  useStatusBar('dark')
   const insets = useSafeAreaInsets()
   const [categories, setCategories] = useState<CategoriesProps>([])
   const [category, setCategory] = useState<string>('all')
