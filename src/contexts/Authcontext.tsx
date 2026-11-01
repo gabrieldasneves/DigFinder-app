@@ -64,6 +64,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   async function signOut() {
     await AsyncStorage.removeItem("@PaleoHunter:token");
+    delete api.defaults.headers.common["Authorization"];
     setUser(null);
     router.replace("/");
   }

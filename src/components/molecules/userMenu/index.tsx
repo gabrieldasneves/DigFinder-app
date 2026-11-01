@@ -1,11 +1,11 @@
-import { View, Text, TouchableOpacity, Modal, Alert } from "react-native";
+import { View, Text, TouchableOpacity, Modal } from "react-native";
 import { IconUser, IconLogout } from "@tabler/icons-react-native";
 import { colors } from "@/styles/colors";
 import { useState } from "react";
 import { styles } from "./styles";
 import { ModalConfirm } from "../modalConfirm";
-import { router } from "expo-router";
 import { api } from "@/services/api";
+import { useAuth } from "@/contexts/Authcontext";
 
 type MenuOption = {
   label: string;
@@ -14,6 +14,7 @@ type MenuOption = {
 };
 
 export function UserMenu() {
+  const { signOut } = useAuth();
   const [isMenuVisible, setIsMenuVisible] = useState(false);
   const [modalConfirmVisible, setModalConfirmVisible] = useState(false);
 
@@ -37,18 +38,13 @@ export function UserMenu() {
   ];
 
   const handleLogout = async () => {
+    setModalConfirmVisible(false);
     try {
-      // Chamada à API de logout (ajuste a rota conforme seu backend)
       await api.post("/auth/logout");
-      router.replace("/");
-    } catch (error: any) {
-      Alert.alert(
-        "Logout failed",
-        error.response?.data?.message || "Try again later."
-      );
-    } finally {
-      setModalConfirmVisible(false);
+    } catch {
+      // JWT logout is client-side; still clear local session if API fails.
     }
+    await signOut();
   };
 
   return (
