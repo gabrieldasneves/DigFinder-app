@@ -1,4 +1,5 @@
 import { useWindowDimensions, View, Text } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { styles } from './styles'
 import { useRef } from 'react'
 import type { DiscoveryProps } from '@/components/atoms/place'
@@ -12,15 +13,15 @@ type Props = {
 
 export function Places({ data }: Props) {
   const dimensions = useWindowDimensions()
+  const insets = useSafeAreaInsets()
   const bottomSheetRef = useRef<BottomSheet>(null)
-  const snapPoints = {
-    min: 278,
-    max: dimensions.height - 128,
-  }
+  const minSnap = Math.round(dimensions.height * 0.28)
+  const maxSnap = dimensions.height - insets.top - 96
   return (
     <BottomSheet
       ref={bottomSheetRef}
-      snapPoints={[snapPoints.min, snapPoints.max]}
+      index={0}
+      snapPoints={[minSnap, maxSnap]}
       handleIndicatorStyle={styles.indicator}
       backgroundStyle={styles.container}
       enableOverDrag={false}

@@ -1,4 +1,5 @@
 import { View, Text, Alert, StyleSheet, Image } from 'react-native'
+import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { api } from '@/services/api'
 import { useEffect, useState } from 'react'
 import type { DiscoveryProps } from '@/components/atoms/place'
@@ -30,6 +31,7 @@ type ApiDiscovery = {
 const BRAZIL_CENTER = { latitude: -15.77, longitude: -47.92 }
 
 export default function Map() {
+  const insets = useSafeAreaInsets()
   const [categories, setCategories] = useState<CategoriesProps>([])
   const [category, setCategory] = useState<string>('all')
   const [discoveries, setDiscoveries] = useState<DiscoveryMapItem[]>([])
@@ -114,13 +116,14 @@ export default function Map() {
     <View style={{ flex: 1, backgroundColor: '#cecece' }}>
       <BackButton
         textStyle={styles.backButtonText}
-        buttonStyle={styles.backButton}
+        buttonStyle={[styles.backButton, { top: insets.top + 8 }]}
       />
 
       <Categories
         data={categories}
         selected={category}
         onSelect={setCategory}
+        top={insets.top + 52}
       />
 
       <MapView
@@ -194,7 +197,6 @@ const styles = StyleSheet.create({
   },
   backButton: {
     position: 'absolute',
-    top: 60,
     left: 20,
     zIndex: 1,
     padding: 7,

@@ -11,9 +11,10 @@ type Props = {
   data: CategoriesProps;
   selected: string;
   onSelect: (id: string) => void;
+  top?: number;
 };
 
-export function Categories({ data, selected, onSelect }: Props) {
+export function Categories({ data, selected, onSelect, top }: Props) {
 
     const categoriesWithAll = [
         { id: "all", name: "All" },
@@ -26,7 +27,7 @@ export function Categories({ data, selected, onSelect }: Props) {
       horizontal
       contentContainerStyle={styles.content}
       showsHorizontalScrollIndicator={false}
-      style={styles.container}
+      style={[styles.container, top !== undefined ? { top } : null]}
       keyExtractor={(item) => item.id}
       renderItem={({ item }) => (
         <Category
