@@ -43,9 +43,10 @@ export default function CreateAccountForm({
       onRegistered();
     } catch (error: unknown) {
       const axiosLike = error as {
-        response?: { data?: { message?: string } };
+        response?: { data?: { message?: string; error?: string } };
       };
       const message =
+        axiosLike.response?.data?.error ??
         axiosLike.response?.data?.message ??
         (error instanceof Error ? error.message : "Try again later.");
       console.error("Signup error:", message);
