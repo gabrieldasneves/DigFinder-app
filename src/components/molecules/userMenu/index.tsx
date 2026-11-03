@@ -4,8 +4,9 @@ import { colors } from "@/styles/colors";
 import { useState } from "react";
 import { styles } from "./styles";
 import { ModalConfirm } from "../modalConfirm";
-import { api } from "@/services/api";
-import { useAuth } from "@/contexts/Authcontext";
+import { api } from '@/services/api'
+import { useAuth } from '@/contexts/Authcontext'
+import { router } from 'expo-router'
 
 type MenuOption = {
   label: string;
@@ -23,8 +24,8 @@ export function UserMenu() {
       label: "Profile",
       icon: <IconUser size={20} color={colors.gray[600]} />,
       onPress: () => {
-        setIsMenuVisible(false);
-        // Navigation will be implemented later
+        setIsMenuVisible(false)
+        router.push('/profile')
       },
     },
     {

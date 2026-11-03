@@ -26,6 +26,23 @@ export async function uploadImageToFirebase(
   }
 }
 
+export async function uploadAvatarToFirebase(
+  imageUri: string,
+  userId: string,
+): Promise<string> {
+  try {
+    const response = await fetch(imageUri)
+    const blob = await response.blob()
+    const fileName = `avatars/${userId}.jpg`
+    const storageRef = ref(storage, fileName)
+    await uploadBytes(storageRef, blob)
+    return await getDownloadURL(storageRef)
+  } catch (error) {
+    console.error('Error uploading avatar:', error)
+    throw error
+  }
+}
+
 export async function uploadMultipleImages(
   imageUris: string[],
   userId: string
