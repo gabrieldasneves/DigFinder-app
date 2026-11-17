@@ -197,8 +197,8 @@ const styles = StyleSheet.create({
     color: colors.green.dark,
   },
   userPin: {
-    width: 56,
-    height: 56,
+    width: 100,
+    height: 100,
   },
   backButton: {
     position: 'absolute',
