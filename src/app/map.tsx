@@ -1,4 +1,4 @@
-import { View, Text, Alert, StyleSheet, Image } from 'react-native'
+import { View, Text, Alert, StyleSheet, Image, Platform } from 'react-native'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { api } from '@/services/api'
 import { useEffect, useState } from 'react'
@@ -129,9 +129,9 @@ export default function Map() {
       />
 
       <MapView
-        provider={PROVIDER_GOOGLE}
-        style={{ flex: 1 }}
-        customMapStyle={mapStyle}
+        provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : undefined}
+        style={StyleSheet.absoluteFill}
+        customMapStyle={Platform.OS === 'android' ? mapStyle : undefined}
         region={initialRegion}
         showsUserLocation={false}
       >
@@ -185,8 +185,8 @@ export default function Map() {
             </Callout>
           </Marker>
         ))}
-        <Places data={discoveries} />
       </MapView>
+      <Places data={discoveries} />
     </View>
   )
 }
