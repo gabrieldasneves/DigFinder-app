@@ -149,12 +149,15 @@ export default function Map() {
         {discoveries.map((item) => (
           <Marker
             key={item.id}
-            coordinate={{ latitude: item.latitude, longitude: item.longitude }}
-            tracksViewChanges={false}
+            coordinate={{
+              latitude: Number(item.latitude),
+              longitude: Number(item.longitude),
+            }}
+            anchor={{ x: 0.5, y: 1 }}
           >
             <Image
               source={require('@/assets/pin.png')}
-              style={{ width: 15, height: 15 }}
+              style={styles.discoveryPin}
               resizeMode="contain"
             />
             <Callout onPress={() => router.push(`/register/${item.id}`)}>
@@ -199,6 +202,10 @@ const styles = StyleSheet.create({
   userPin: {
     width: 100,
     height: 100,
+  },
+  discoveryPin: {
+    width: 48,
+    height: 48,
   },
   backButton: {
     position: 'absolute',
