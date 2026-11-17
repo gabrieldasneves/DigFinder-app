@@ -127,6 +127,7 @@ export default function Map() {
       <MapView
         provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : undefined}
         style={StyleSheet.absoluteFill}
+        userInterfaceStyle="light"
         customMapStyle={Platform.OS === 'android' ? mapStyle : undefined}
         region={initialRegion}
         showsUserLocation={false}
