@@ -5,7 +5,7 @@ import { fontFamily } from "@/styles/typography";
 export const styles = StyleSheet.create({
   container: {
     position: "absolute",
-    top: 60,
+    top: 84,
     right: 24,
     zIndex: 1,
   },
@@ -24,7 +24,7 @@ export const styles = StyleSheet.create({
     backgroundColor: "rgba(0, 0, 0, 0.5)",
     justifyContent: "flex-start",
     alignItems: "flex-end",
-    paddingTop: 80,
+    paddingTop: 104,
     paddingRight: 24,
   },
   menuContainer: {
