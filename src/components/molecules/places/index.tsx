@@ -44,13 +44,6 @@ export function Places ({ data }: Props) {
           heightRef.current = next
           setHeight(next)
         },
-        onPanResponderRelease: (_, gesture) => {
-          const midpoint = (minHeight + maxHeightRef.current) / 2
-          const pulledUp = gesture.vy < -0.4 || heightRef.current > midpoint
-          const snapped = pulledUp ? maxHeightRef.current : minHeight
-          heightRef.current = snapped
-          setHeight(snapped)
-        },
       }),
     [minHeight],
   )
