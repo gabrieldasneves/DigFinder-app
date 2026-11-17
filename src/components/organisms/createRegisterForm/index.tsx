@@ -36,7 +36,7 @@ const registerSchema = z.object({
     .min(10, 'Description must have at least 10 characters'),
   latitude: z.number(),
   longitude: z.number(),
-  photos: z.array(z.string()).min(1, 'At least one photo is required'),
+  photos: z.array(z.string()),
 })
 
 type RegisterFormData = z.infer<typeof registerSchema>
@@ -73,6 +73,9 @@ export default function CreateRegisterForm() {
     formState: { errors },
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
+    defaultValues: {
+      photos: [],
+    },
   })
 
   async function fetchCategories() {
@@ -219,8 +222,10 @@ export default function CreateRegisterForm() {
         return
       }
 
-      Alert.alert('Uploading images...')
-      const imgUrls = await uploadMultipleImages(photos, user.user.id)
+      const imgUrls =
+        photos.length > 0
+          ? await uploadMultipleImages(photos, user.user.id)
+          : []
 
       const discoveryData = {
         title: data.title,
