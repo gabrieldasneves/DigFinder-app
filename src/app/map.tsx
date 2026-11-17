@@ -121,7 +121,7 @@ export default function Map() {
         data={categories}
         selected={category}
         onSelect={setCategory}
-        top={insets.top + 52}
+        top={insets.top + 76}
       />
 
       <MapView
