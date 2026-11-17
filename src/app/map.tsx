@@ -82,10 +82,6 @@ export default function Map() {
     }
   }
 
-  const userLocationPin = Image.resolveAssetSource(
-    require('@/assets/location.png'),
-  )
-
   async function getCurrentLocation() {
     try {
       const { granted } = await Location.requestForegroundPermissionsAsync()
@@ -138,13 +134,15 @@ export default function Map() {
         {userCoordinate ? (
           <Marker
             coordinate={userCoordinate}
-            image={userLocationPin}
-            style={{ width: 75, height: 75 }}
-            anchor={{ x: 0.5, y: 0.5 }}
-            tracksViewChanges={false}
+            anchor={{ x: 0.5, y: 1 }}
             zIndex={1000}
-            rotation={0}
-          />
+          >
+            <Image
+              source={require('@/assets/location.png')}
+              style={styles.userPin}
+              resizeMode="contain"
+            />
+          </Marker>
         ) : null}
 
         {discoveries.map((item) => (
@@ -196,6 +194,10 @@ const styles = StyleSheet.create({
     fontFamily: fontFamily.semiBold,
     fontSize: 20,
     color: colors.green.dark,
+  },
+  userPin: {
+    width: 56,
+    height: 56,
   },
   backButton: {
     position: 'absolute',
