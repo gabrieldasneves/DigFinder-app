@@ -135,6 +135,7 @@ export const styles = StyleSheet.create({
     marginBottom: 28,
     borderRadius: 20,
     overflow: 'hidden',
+    position: 'relative',
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
@@ -174,6 +175,15 @@ export const styles = StyleSheet.create({
   },
   map: {
     flex: 1,
+  },
+  mapPin: {
+    position: 'absolute',
+    width: 72,
+    height: 72,
+    left: '50%',
+    marginLeft: -36,
+    top: '50%',
+    marginTop: -72,
   },
   locationButtonContainer: {
     alignItems: 'center',

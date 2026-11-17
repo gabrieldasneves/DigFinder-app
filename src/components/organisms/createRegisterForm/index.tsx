@@ -9,13 +9,15 @@ import {
   Image,
   Alert,
   ActivityIndicator,
+  Platform,
 } from 'react-native'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import * as z from 'zod'
 import * as ImagePicker from 'expo-image-picker'
 import * as Location from 'expo-location'
-import MapView, { Marker } from 'react-native-maps'
+import MapView, { PROVIDER_GOOGLE } from 'react-native-maps'
+import { mapStyle } from '@/styles/map'
 import { Picker } from '@react-native-picker/picker'
 import { api } from '@/services/api'
 import { useRouter } from 'expo-router'
@@ -44,6 +46,11 @@ type Category = {
   name: string
 }
 
+const mapZoom = {
+  latitudeDelta: 0.003,
+  longitudeDelta: 0.003,
+}
+
 export default function CreateRegisterForm() {
   const router = useRouter()
   const user = useAuth()
@@ -52,11 +59,11 @@ export default function CreateRegisterForm() {
   const [categories, setCategories] = useState<Category[]>([])
   const [loading, setLoading] = useState(true)
   const [locationMode, setLocationMode] = useState<'map' | 'gps'>('map')
+  const [isMapReady, setIsMapReady] = useState(false)
   const [mapRegion, setMapRegion] = useState({
     latitude: 35.6938,
     longitude: 139.7034,
-    latitudeDelta: 0.0922,
-    longitudeDelta: 0.0421,
+    ...mapZoom,
   })
 
   const {
@@ -124,6 +131,7 @@ export default function CreateRegisterForm() {
       if (!hasPermission) {
         setValue('latitude', mapRegion.latitude)
         setValue('longitude', mapRegion.longitude)
+        setIsMapReady(true)
         return
       }
 
@@ -140,8 +148,7 @@ export default function CreateRegisterForm() {
       setMapRegion({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
-        latitudeDelta: 0.0922,
-        longitudeDelta: 0.0421,
+        ...mapZoom,
       })
 
       setValue('latitude', location.coords.latitude)
@@ -153,6 +160,8 @@ export default function CreateRegisterForm() {
         'Location',
         'It was not possible to obtain your location. You can select manually on the map.',
       )
+    } finally {
+      setIsMapReady(true)
     }
   }
 
@@ -176,8 +185,7 @@ export default function CreateRegisterForm() {
       setMapRegion({
         latitude: location.coords.latitude,
         longitude: location.coords.longitude,
-        latitudeDelta: 0.005,
-        longitudeDelta: 0.005,
+        ...mapZoom,
       })
 
       setValue('latitude', location.coords.latitude)
@@ -404,24 +412,31 @@ export default function CreateRegisterForm() {
         </View>
         {locationMode === 'map' && (
           <View style={styles.mapContainer}>
-            <MapView
-              style={styles.map}
-              region={mapRegion}
-              onRegionChangeComplete={(region) => {
-                setMapRegion(region)
-                setValue('latitude', region.latitude)
-                setValue('longitude', region.longitude)
-              }}
-            >
-              {location && (
-                <Marker
-                  coordinate={{
-                    latitude: location.coords.latitude,
-                    longitude: location.coords.longitude,
-                  }}
-                />
-              )}
-            </MapView>
+            {isMapReady ? (
+              <MapView
+                provider={Platform.OS === 'android' ? PROVIDER_GOOGLE : undefined}
+                style={styles.map}
+                userInterfaceStyle="light"
+                customMapStyle={Platform.OS === 'android' ? mapStyle : undefined}
+                initialRegion={mapRegion}
+                onRegionChangeComplete={(region) => {
+                  setValue('latitude', region.latitude)
+                  setValue('longitude', region.longitude)
+                }}
+              />
+            ) : (
+              <ActivityIndicator
+                style={styles.map}
+                color={colors.green.dark}
+              />
+            )}
+            {isMapReady && (
+              <Image
+                source={require('@/assets/location.png')}
+                style={styles.mapPin}
+                resizeMode="contain"
+              />
+            )}
           </View>
         )}
         {locationMode === 'gps' && (
