@@ -92,8 +92,8 @@ export default function Map() {
         setInitialRegion({
           latitude,
           longitude,
-          latitudeDelta: 0.05,
-          longitudeDelta: 0.05,
+          latitudeDelta: 0.012,
+          longitudeDelta: 0.012,
         })
       }
     } catch (error) {
