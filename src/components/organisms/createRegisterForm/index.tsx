@@ -462,7 +462,9 @@ export default function CreateRegisterForm() {
 
         <TouchableOpacity
           style={styles.submitButton}
-          onPress={handleSubmit(onSubmit)}
+          onPress={() => {
+            void handleSubmit(onSubmit)()
+          }}
         >
           <Text style={styles.buttonSubmitText}>Register Find</Text>
         </TouchableOpacity>

@@ -10,9 +10,12 @@ cd ../Digfinder-server
 npm start   # tsx watch src/server.ts → port 3333
 ```
 
-**To run the app:**
+**To run the app** (Node.js 22.13+, see `.nvmrc`):
 ```bash
-npm start   # or: npm run android / npm run ios
+nvm use
+npm start          # Metro. Expo Go from the stores does not support SDK 58 yet.
+npm run ios        # expo run:ios — development build
+npm run android    # expo run:android — development build
 ```
 **Celular físico (Expo Go / dev build):** defina `EXPO_PUBLIC_API_URL` no `.env` com a URL LAN do Mac, ex.: `http://192.168.1.4:3333` (mesma rede que o Metro). No telefone, `localhost` é o próprio aparelho — não serve para o Digfinder-server no Mac.
 
@@ -38,7 +41,7 @@ The project was adapted from an NLW Pocket tutorial (a coupon/nearby-markets app
 
 ## Stack
 
-- **Expo SDK ~54 / React Native 0.81.5**
+- **Expo SDK 58 / React Native 0.88**
 - **Expo Router v6** — file-based routing (similar to Next.js for mobile)
 - **Axios** — HTTP client, single shared instance; `baseURL` from `EXPO_PUBLIC_API_URL` or `http://localhost:3333` (`src/services/api.ts`)
 - **React Context API** — only global state mechanism (no Redux, Zustand, etc.)

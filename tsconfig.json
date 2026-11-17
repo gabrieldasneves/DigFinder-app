@@ -17,5 +17,10 @@
     "expo-env.d.ts",
     "env.d.ts",
     "src/types/**/*.ts"
+  ],
+  "exclude": [
+    "vite.config.ts",
+    "src/main.tsx",
+    "src/App.tsx"
   ]
 }

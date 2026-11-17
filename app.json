@@ -7,26 +7,6 @@
     "icon": "./assets/images/app-icon.png",
     "scheme": "myapp",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
-    "splash": {
-      "image": "./assets/images/splash-background.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#5A3725",
-      "dark": {
-        "image": "./assets/images/splash-background.png",
-        "resizeMode": "contain",
-        "backgroundColor": "#5A3725"
-      }
-    },
-    "androidStatusBar": {
-      "barStyle": "light-content",
-      "backgroundColor": "#5A3725",
-      "translucent": false
-    },
-    "androidNavigationBar": {
-      "barStyle": "light-content",
-      "backgroundColor": "#5A3725"
-    },
     "ios": {
       "bundleIdentifier": "com.anonymous.paleo",
       "config": {
@@ -61,7 +41,22 @@
           }
         }
       ],
-      "expo-router"
+      "expo-router",
+      "expo-font",
+      [
+        "expo-status-bar",
+        {
+          "style": "light"
+        }
+      ],
+      [
+        "expo-navigation-bar",
+        {
+          "style": "light",
+          "enforceContrast": false
+        }
+      ],
+      "expo-web-browser"
     ],
     "experiments": {
       "typedRoutes": true
