@@ -1,39 +1,18 @@
-import { View, Text } from "react-native";
-import { useLocalSearchParams } from "expo-router";
-import { useEffect, useState } from "react";
-import { api } from "@/services/api";
-import { Loading } from "@/components/atoms/loading";
+import { useLocalSearchParams } from 'expo-router'
+import { DiscoveryDetail } from '@/components/organisms/discoveryDetail'
+import { useGetDiscoveryDetails } from '@/hooks/useGetDiscoveryDetails'
+import { useStatusBar } from '@/hooks/useStatusBar'
 
-export default function RegisterDetail() {
-  const { id } = useLocalSearchParams();
-  const [register, setRegister] = useState<any>(null);
-  const [isLoading, setIsLoading] = useState(true);
-
-  async function fetchRegister() {
-    try {
-      const { data } = await api.get(`/registers/${id}`);
-      setRegister(data);
-      setIsLoading(false);
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
-  useEffect(() => {
-    fetchRegister();
-  }, []);
-
-  if (isLoading) {
-    return (
-      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
-        <Loading />
-      </View>
-    );
-  }
+export default function RegisterDetail () {
+  useStatusBar('dark')
+  const { id } = useLocalSearchParams()
+  const { discovery, isLoading, hasError } = useGetDiscoveryDetails(id)
 
   return (
-    <View
-      style={{ flex: 1, justifyContent: "center", alignItems: "center" }}
-    ></View>
-  );
+    <DiscoveryDetail
+      discovery={discovery}
+      isLoading={isLoading}
+      hasError={hasError}
+    />
+  )
 }
