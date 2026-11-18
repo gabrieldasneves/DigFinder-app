@@ -4,6 +4,7 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Loading } from '@/components/atoms/loading'
 import { DiscoveryCarousel } from '@/components/molecules/discoveryCarousel'
 import { DiscoveryCategories } from '@/components/molecules/discoveryCategories'
+import { DiscoveryDirections } from '@/components/molecules/discoveryDirections'
 import type { DiscoveryDetailData } from './types'
 import { styles } from './styles'
 
@@ -82,6 +83,10 @@ export function DiscoveryDetail ({ discovery, isLoading, hasError }: Props) {
           <Text style={[styles.description, !description && styles.descriptionEmpty]}>
             {description || 'No description provided.'}
           </Text>
+          <DiscoveryDirections
+            latitude={discovery.latitude}
+            longitude={discovery.longitude}
+          />
         </View>
       </ScrollView>
     </View>
