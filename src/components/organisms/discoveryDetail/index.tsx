@@ -3,6 +3,7 @@ import { router } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Loading } from '@/components/atoms/loading'
 import { DiscoveryCarousel } from '@/components/molecules/discoveryCarousel'
+import { DiscoveryCategories } from '@/components/molecules/discoveryCategories'
 import type { DiscoveryDetailData } from './types'
 import { styles } from './styles'
 
@@ -76,6 +77,7 @@ export function DiscoveryDetail ({ discovery, isLoading, hasError }: Props) {
           <Text style={styles.meta}>
             {formatDiscoveryDate(discovery.discoveryDate)}
           </Text>
+          <DiscoveryCategories categories={discovery.categories} />
         </View>
       </ScrollView>
     </View>
