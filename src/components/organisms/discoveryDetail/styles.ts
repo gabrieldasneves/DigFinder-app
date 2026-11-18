@@ -11,17 +11,21 @@ export const styles = StyleSheet.create({
     position: 'absolute',
     left: 16,
     zIndex: 2,
-    paddingVertical: 6,
-    paddingHorizontal: 4,
+    padding: 7,
+    backgroundColor: colors.gray[100],
+    borderRadius: 12,
   },
   backButtonText: {
     fontFamily: fontFamily.semiBold,
     fontSize: 18,
     color: colors.brown.strong,
   },
+  scroll: {
+    paddingBottom: 32,
+  },
   content: {
     paddingHorizontal: 24,
-    paddingBottom: 32,
+    paddingTop: 20,
   },
   title: {
     ...typography.titleLg,

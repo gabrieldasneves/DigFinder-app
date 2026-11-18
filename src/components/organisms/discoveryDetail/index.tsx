@@ -2,6 +2,7 @@ import { ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import { router } from 'expo-router'
 import { useSafeAreaInsets } from 'react-native-safe-area-context'
 import { Loading } from '@/components/atoms/loading'
+import { DiscoveryCarousel } from '@/components/molecules/discoveryCarousel'
 import type { DiscoveryDetailData } from './types'
 import { styles } from './styles'
 
@@ -58,22 +59,24 @@ export function DiscoveryDetail ({ discovery, isLoading, hasError }: Props) {
       </TouchableOpacity>
 
       <ScrollView
-        contentContainerStyle={[
-          styles.content,
-          { paddingTop: insets.top + 56 },
-        ]}
+        contentContainerStyle={styles.scroll}
         showsVerticalScrollIndicator={false}
       >
-        <Text style={styles.title}>{discovery.title}</Text>
-        <View style={[styles.badge, isVerified && styles.badgeVerified]}>
-          <Text style={[styles.badgeText, isVerified && styles.badgeTextVerified]}>
-            {discovery.status}
+        <DiscoveryCarousel images={discovery.images} />
+        <View style={styles.content}>
+          <Text style={styles.title}>{discovery.title}</Text>
+          <View style={[styles.badge, isVerified && styles.badgeVerified]}>
+            <Text
+              style={[styles.badgeText, isVerified && styles.badgeTextVerified]}
+            >
+              {discovery.status}
+            </Text>
+          </View>
+          <Text style={styles.meta}>Reported by {discovery.user.name}</Text>
+          <Text style={styles.meta}>
+            {formatDiscoveryDate(discovery.discoveryDate)}
           </Text>
         </View>
-        <Text style={styles.meta}>Reported by {discovery.user.name}</Text>
-        <Text style={styles.meta}>
-          {formatDiscoveryDate(discovery.discoveryDate)}
-        </Text>
       </ScrollView>
     </View>
   )
