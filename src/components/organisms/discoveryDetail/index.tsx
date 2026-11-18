@@ -49,6 +49,7 @@ export function DiscoveryDetail ({ discovery, isLoading, hasError }: Props) {
   }
 
   const isVerified = discovery.status === 'verified'
+  const description = discovery.description?.trim()
 
   return (
     <View style={styles.screen}>
@@ -78,6 +79,9 @@ export function DiscoveryDetail ({ discovery, isLoading, hasError }: Props) {
             {formatDiscoveryDate(discovery.discoveryDate)}
           </Text>
           <DiscoveryCategories categories={discovery.categories} />
+          <Text style={[styles.description, !description && styles.descriptionEmpty]}>
+            {description || 'No description provided.'}
+          </Text>
         </View>
       </ScrollView>
     </View>

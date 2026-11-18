@@ -55,6 +55,14 @@ export const styles = StyleSheet.create({
     ...typography.textSm,
     color: colors.gray[400],
   },
+  description: {
+    ...typography.textMd,
+    color: colors.gray[600],
+    marginTop: 20,
+  },
+  descriptionEmpty: {
+    color: colors.gray[400],
+  },
   errorBody: {
     flex: 1,
     alignItems: 'center',
